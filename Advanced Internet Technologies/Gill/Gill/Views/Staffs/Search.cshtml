@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search for Staff by Id</h2>
+
+<div class="col-md-10">
+
+    <input type="text" id="StaffId" size="5"/>
+    <input type="submit" name="SearchButton" id="SearchButton" value="Search"/>
+
+</div>
+<br/>
+<div id="divProcessing">
+    <p>Please wait</p>
+</div>
+<br/>
+<div id="divResult"></div>
+
+@section Scripts{
+@Scripts.Render("~/bundles/jqueryval")
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#divProcessing").hide();
+        $('#SearchButton').click(function () {
+            search();
+        });
+    });
+
+    function search() {
+
+        $("#divResult").empty();
+        $("#divProcessing").show();
+        var staffId = $("#StaffId").val();
+        var url = "../api/Staffs/" + staffId;
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                $("#divProcessing").hide();
+                $("<h3>Results</h3>").appendTo("#divResult");
+                $("#divResult").append("<p> Id: " + resp.Id + "<br/> Last Name: " + resp.LName + "<br/> First Name: " + resp.FName +  "<br/> Employed Date: " + resp.EmployedDate);
+                $("#divResult").append("</p>");
+            }
+        })
+    }
+
+
+
+</script> 
+    
+}
